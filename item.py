@@ -11,7 +11,7 @@ class Entry(object):
                 self.summ, self.cmd, self.desc, self.vote)
 
     def to_tuple(self):
-        return self.summ ,self.cmd , str(self.desc), self.vote
+        return self.summ ,self.cmd , unicode(self.desc), self.vote
 
 
 class Desc(object):
@@ -29,7 +29,7 @@ class Desc(object):
                 for content in para.contents:
                     if isinstance(content, unicode):
                         pstr += content.strip()
-                    else:
+                    elif content.string is not None:
                         pstr += content.string.strip()
                 perdes_str.append(pstr)
         return perdes_str
