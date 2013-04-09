@@ -54,8 +54,10 @@ class Database(object):
 
 def main():
     """test"""
-    db = Database('db')
+    # crawl
     c = Crawler('http://www.commandlinefu.com/commands/browse/')
+    # write to database
+    db = Database('db')
     db.add_n_entry(c.entrys)
     db.close()
 

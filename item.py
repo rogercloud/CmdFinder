@@ -1,5 +1,5 @@
 class Entry(object):
-    ''' '''
+    ''' database entry '''
     def __init__(self,summ,cmd,desc,vote):
         self.summ= summ
         self.cmd = cmd 
