@@ -1,14 +1,17 @@
 class Entry(object):
     ''' '''
-    def __init__(self,summary,cmd,desc,vote):
-        self.summary = summary
+    def __init__(self,summ,cmd,desc,vote):
+        self.summ= summ
         self.cmd = cmd 
         self.desc = desc 
         self.vote = vote
         
     def __str__(self):
         return 'smmary: %s\ncmd: %s\ndesc: %s\nvote:%d\n' % (\
-                self.summary, self.cmd, self.desc, self.vote)
+                self.summ, self.cmd, self.desc, self.vote)
+
+    def to_tuple(self):
+        return self.summ ,self.cmd , str(self.desc), self.vote
 
 
 class Desc(object):

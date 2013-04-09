@@ -8,8 +8,9 @@ class Crawler(object):
         page = urllib.urlopen(url).readlines()
         self._soup = BS(''.join(page))
         self.entrys = []
+        self._filt()
 
-    def filter(self):
+    def _filt(self):
         #summary
         sums = [s.a.string for s in self._soup.find_all('div', 'summary')]
         #command
@@ -21,3 +22,43 @@ class Crawler(object):
 
         for i in xrange(len(sums)):
             self.entrys.append(Entry(sums[i], cmds[i], desc[i], vote[i]))
+
+class Database(object):
+    def __init__(self, db):
+        self.conn = sqlite3.connect(db)
+        self.c = self.conn.cursor()
+        self._clean_db()
+
+    def _clean_db(self):
+        self.c.execute("SELECT name FROM sqlite_master WHERE type='table';") 
+        for table in self.c.fetchall():
+            print 'delete table %s' % (table[0], )
+            self.c.execute("drop table %s;" % (table[0],))
+        self.c.execute("create table entry (summ text, cmd text, desc text, vote num)")
+        return
+        
+    def add_entry(self, entry):
+        print entry.to_tuple()
+        self.c.execute("insert into entry values (?, ?, ?, ?);",
+                entry.to_tuple())
+
+    def add_n_entry(self, entry):
+        self.c.executemany("insert into entry values (?,?,?,?);",
+                [e.to_tuple() for e in entry])
+
+    def close(self):
+        self.conn.commit()
+        self.conn.close()
+
+
+
+def main():
+    """test"""
+    db = Database('db')
+    c = Crawler('http://www.commandlinefu.com/commands/browse/')
+    db.add_n_entry(c.entrys)
+    db.close()
+
+
+if __name__ == '__main__':
+    main()
